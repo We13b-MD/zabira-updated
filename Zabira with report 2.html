@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Google Web Designer 16.1.0.0530">
+  <meta name="template" content="Banner 3.0.0">
+  <meta name="environment" content="gwd-dv360">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="gwdpage_style.css" rel="stylesheet" data-version="13" data-exports-type="gwd-page">
+  <link href="gwdpagedeck_style.css" rel="stylesheet" data-version="14" data-exports-type="gwd-pagedeck">
+  <link href="gwdgooglead_style.css" rel="stylesheet" data-version="9" data-exports-type="gwd-google-ad">
+  <link href="gwdvideo_style.css" rel="stylesheet" data-version="19" data-exports-type="gwd-video">
+  <link href="gwdimage_style.css" rel="stylesheet" data-version="17" data-exports-type="gwd-image">
+  <link href="gwdtaparea_style.css" rel="stylesheet" data-version="7" data-exports-type="gwd-taparea">
+  <style id="gwd-lightbox-style">
+    .gwd-lightbox {
+      overflow: hidden;
+    }
+  </style>
+  <style id="gwd-text-style">
+    p {
+      margin: 0px;
+    }
+    h1 {
+      margin: 0px;
+    }
+    h2 {
+      margin: 0px;
+    }
+    h3 {
+      margin: 0px;
+    }
+  </style>
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0px;
+    }
+    .gwd-page-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    .gwd-page-content {
+      background-color: transparent;
+      transform: perspective(1400px) matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+      position: absolute;
+      transform-style: preserve-3d;
+    }
+    .gwd-page-content * {
+      transform-style: preserve-3d;
+    }
+    .gwd-page-wrapper {
+      background-color: rgb(255, 255, 255);
+      position: absolute;
+      transform: translateZ(0px);
+    }
+    .gwd-page-size {
+      width: 300px;
+      height: 250px;
+    }
+    .gwd-video-euac {
+      position: absolute;
+      left: 0px;
+      transform-origin: 50% 50% 0px;
+      width: 300px;
+      height: 250px;
+      top: 0px;
+    }
+    .gwd-image-1ymu {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+    }
+    .gwd-image-1smu {
+      width: 20px;
+      height: 13px;
+    }
+    .gwd-image-n30b {
+      height: 13px;
+      transform-origin: 10px 6.5px 0px;
+    }
+    .gwd-taparea-1k76 {
+      position: absolute;
+      width: 300px;
+      transform-origin: 50% 50% 0px;
+      left: 0px;
+      top: 0px;
+      height: 196px;
+    }
+  </style>
+  <script data-source="gwd_webcomponents_v1_min.js" data-version="2" data-exports-type="gwd_webcomponents_v1" src="gwd_webcomponents_v1_min.js"></script>
+  <script data-source="gwdpage_min.js" data-version="13" data-exports-type="gwd-page" src="gwdpage_min.js"></script>
+  <script data-source="gwdpagedeck_min.js" data-version="14" data-exports-type="gwd-pagedeck" src="gwdpagedeck_min.js"></script>
+  <script data-source="https://s0.2mdn.net/ads/studio/Enabler.js" data-exports-type="gwd-google-ad" src="https://s0.2mdn.net/ads/studio/Enabler.js"></script>
+  <script data-source="gwdgooglead_min.js" data-version="9" data-exports-type="gwd-google-ad" src="gwdgooglead_min.js"></script>
+  <script data-source="gwdvideo_min.js" data-version="19" data-exports-type="gwd-video" src="gwdvideo_min.js"></script>
+  <script data-source="gwdimage_min.js" data-version="17" data-exports-type="gwd-image" src="gwdimage_min.js"></script>
+  <script data-source="gwdtaparea_min.js" data-version="7" data-exports-type="gwd-taparea" src="gwdtaparea_min.js"></script>
+  <script type="text/javascript" gwd-events="support" src="gwd-events-support.1.0.js"></script>
+  <script type="text/javascript" gwd-events="handlers">
+    window.gwd = window.gwd || {};
+
+let impressionCount = 0; // Tracks the number of ad impressions
+let clickCounts = 0; // Tracks the number of ad clicks
+let firstQuartileReached = 0; // Track if first quartile was logged
+let thirdQuartileReached = 0; // Track if second quartile was logged
+let midpointReached = 0;
+let completedReached = 0; // Track if completion was logged
+let videoStarts = 0;
+let videoCompleted = 0;
+// Function to calculate CTR
+
+function getDeviceId() {
+  const platform = navigator.platform || "unknown"; // OS platform
+  const userAgent = navigator.userAgent || "unknown"; // Browser and device details
+
+  
+  function generateRandomId() {
+  return 'device-' + Math.random().toString(36).substr(2, 9) + '-' + Date.now();
+}
+  // Check for iPhone, Android, etc.
+  let deviceType;
+  if (/iPhone|iPad|iPod/.test(userAgent)) {
+    deviceType = "iPhone";
+  } else if (/Android/.test(userAgent)) {
+    deviceType = "Android";
+  } else if (/Win/.test(platform)) {
+    deviceType = "Windows";
+  } else if (/Mac/.test(platform)) {
+    deviceType = "Mac";
+  } else {
+    deviceType = "UnknownDevice";
+  }
+
+  // Combine device details into an ID
+  const timestamp = Date.now(); // Optional, ensures uniqueness
+  const deviceId = `${deviceType}-${platform}-${timestamp}`;
+
+  return deviceId || generateRandomId(); // Fallback to a random ID if necessary
+}
+
+// Retrieve or Create a Device ID
+let deviceId = localStorage.getItem('deviceId');
+if (!deviceId) {
+  deviceId = getDeviceId(); // Use the enhanced getDeviceId function
+  localStorage.setItem('deviceId', deviceId);
+}
+
+console.log("Unique Device ID:", deviceId);
+
+
+
+function recordImpression() {
+  impressionCount++;
+  console.log(`Impressions recorded: ${impressionCount}`);
+ sendPayload()
+}
+recordImpression()
+
+function calculateCTR() {
+  const ctr = impressionCount > 0 ? (clickCounts / impressionCount)  : 0;
+  return ctr
+ console.log(ctr)
+}
+
+function getBrowserInfo() {
+      const userAgent = navigator.userAgent;
+      let browser = "Unknown";
+      if (userAgent.indexOf("Chrome") > -1) {
+        browser = "Chrome";
+      } else if (userAgent.indexOf("Firefox") > -1) {
+        browser = "Firefox";
+      } else if (userAgent.indexOf("Safari") > -1) {
+        browser = "Safari";
+      } else if (userAgent.indexOf("Edge") > -1) {
+        browser = "Edge";
+      }
+      return browser;
+    }
+function getOperatingSystem() {
+      const userAgent = navigator.userAgent.toLowerCase();
+
+      // Determine operating system
+      if (userAgent.includes("windows nt 10.0")) return "Windows 10";
+      if (userAgent.includes("windows nt 11.0")) return "Windows 10";
+      if (userAgent.includes("windows nt 6.2")) return "Windows 8";
+      if (userAgent.includes("windows nt 6.1")) return "Windows 7";
+      if (userAgent.includes("mac os x")) return "macOS";
+      if (userAgent.includes("android")) return "Android";
+      if (userAgent.includes("iphone os")) return "iOS";
+      if (userAgent.includes("linux")) return "Linux";
+
+      return "Unknown"; // Default value
+    }
+
+
+    function getDeviceType() {
+  
+      const userAgent = navigator.userAgent;
+
+  // Check for Tablet
+  if (/tablet|ipad|playbook|silk/i.test(userAgent)) {
+    return "Tablet";
+  }
+  // Check for Mobile
+  if (/mobile|android|iphone|ipod|blackberry|bb10|mini|windows\sce|palm/i.test(userAgent)) {
+    return "Mobile";
+  }
+  // Default to Desktop
+  return "Desktop";
+}
+
+// Example Usage:
+console.log("Device Type:", getDeviceType());
+
+
+
+    function getCurrentDate() {
+      const today = new Date();
+      return today.toISOString().split("T")[0]; // Extracts the date part (e.g., "2024-12-10")
+    }
+
+    function getCurrentTime() {
+      const now = new Date();
+      return now.toTimeString().split(" ")[0]; // Extracts the time part (e.g., "14:30:00")
+    }
+
+
+   
+
+   
+    
+calculateCTR()
+    gwd.click = function(event) {
+      
+      clickCounts++;
+     console.log(`Click counts: ${clickCounts}`);
+    
+
+     sendPayload();
+      window.open('https://bit.ly/41rTjx0')
+    };
+const video = document.getElementById('Zabira_300_by_250_with_report');
+     /* if (video) {
+    const currentTime = video.currentTime;
+    const duration = video.duration;
+
+    // Update milestones
+    if (!firstQuartileReached && currentTime >= duration * 0.25) {
+      firstQuartileReached++;
+      console.log('First Quartile Reached');
+    }
+
+    if (!midpointReached && currentTime >= duration * 0.50) {
+      midpointReached++;
+      console.log('Midpoint Reached');
+    }
+
+    if (!thirdQuartileReached && currentTime >= duration * 0.75) {
+      thirdQuartileReached++;
+      console.log('Third Quartile Reached');
+    }
+  }
+*/
+    
+document.addEventListener("DOMContentLoaded", () => {
+  const video = document.getElementById("Zabira_300_by_250_with_report");
+
+  if (video) {
+
+    video.addEventListener("play", () => {
+      videoStarts++; // Increment the video starts counter
+      console.log(`Video has started ${videoStarts} time(s)`);
+      sendPayload();
+    })
+    video.addEventListener("ended", () => {
+      if (!videoCompleted) {
+        videoCompleted++;
+        console.log("Video Completed");
+        sendPayload();
+      }
+    });
+  } else {
+    console.error("Video element not found!");
+  }
+    video.addEventListener("timeupdate", () => {
+      const currentTime = video.currentTime;
+      const duration = video.duration;
+
+      if (!firstQuartileReached && currentTime >= duration * 0.25) {
+        firstQuartileReached = true; // Use a boolean
+        console.log("First Quartile Reached");
+        sendPayload();
+      }
+
+      if (!midpointReached && currentTime >= duration * 0.5) {
+        midpointReached = true; // Use a boolean
+        console.log("Midpoint Reached");
+        sendPayload();
+      }
+
+      if (!thirdQuartileReached && currentTime >= duration * 0.75) {
+        thirdQuartileReached = true; // Use a boolean
+        console.log("Third Quartile Reached");
+        sendPayload();
+      }
+    });
+  }) 
+
+
+  function calculateVTR() {
+  if (impressionCount === 0) {
+    return 0; // Avoid division by zero
+  }
+  
+  const vtr = (videoCompleted / impressionCount) * 100;
+  return parseFloat(vtr.toFixed(2)); // Round to two decimal places
+}
+
+function getFormattedHour() {
+  const now = new Date();
+  const hour = now.getHours(); // Get the hour (0-23)
+  return `${hour}.00`; // Format as "19.00"
+}
+     function sendPayload() {
+       const payload = {
+        date:getCurrentDate(),
+        impressions: impressionCount++,
+        clicks: clickCounts,
+        ctr: `${calculateCTR()}`,
+        videoStart:videoStarts++,
+        videoCompleted:videoCompleted++,
+        vtr:calculateVTR(),
+        firstquartile:firstQuartileReached++,
+        midpoint:midpointReached++,
+        thirdquartile:thirdQuartileReached++,
+        operatingSystem:getOperatingSystem(),
+        browser:getBrowserInfo(),
+        deviceId:deviceId,
+        deviceType:getDeviceType(),
+        hour:getFormattedHour()
+        };
+
+
+
+
+      fetch("https://script.google.com/macros/s/AKfycbxoBgfLDvSkj6gcP-NRjgLyxh8XbnJ9L4ue-cpC_jH4tY_Ko-i_owb4DtIQyoLZBO10/exec", {
+          redirect: "follow",
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        })
+        .then(() => {
+          // Since you can't access the response, assume success here
+          console.log("Request sent successfully.");
+          console.log(payload)
+        })
+        .catch((error) => console.error("Error:", error));
+
+    }
+  </script>
+  </script>
+  <script type="text/javascript" gwd-events="registration">
+    // Support code for event handling in Google Web Designer
+    // This script block is auto-generated. Please do not edit!
+    gwd.actions.events.registerEventHandlers = function(event) {
+      gwd.actions.events.addHandler('gwd-taparea_1', 'action', gwd.click, false);
+    };
+    gwd.actions.events.deregisterEventHandlers = function(event) {
+      gwd.actions.events.removeHandler('gwd-taparea_1', 'action', gwd.click, false);
+    };
+    document.addEventListener("DOMContentLoaded", gwd.actions.events.registerEventHandlers);
+    document.addEventListener("unload", gwd.actions.events.deregisterEventHandlers);
+
+    const videoElement = document.getElementById('Zabira_300_by_250_with_report')
+
+
+  </script>
+</head>
+
+<body>
+  <gwd-google-ad id="gwd-ad" polite-load="">
+    <gwd-metric-configuration>
+      <gwd-metric-event source="gwd-taparea_1" event="tapareaexit" metric="" exit="Exit"></gwd-metric-event>
+    </gwd-metric-configuration>
+    <gwd-pagedeck class="gwd-page-container" id="pagedeck">
+      <gwd-page id="page1" class="gwd-page-wrapper gwd-page-size gwd-lightbox" data-gwd-width="300px" data-gwd-height="250px">
+        <div class="gwd-page-content gwd-page-size">
+          <gwd-video muted="" sources="assets/Zabira 300 by 250 with report.mp4" id="Zabira_300_by_250_with_report" class="gwd-video-euac"  loop="" controls="" autoplay =""></gwd-video>
+          <gwd-image source="assets/dtlogo.png" scaling="stretch" id="dtlogo_7" class="gwd-image-1ymu gwd-image-1smu gwd-image-n30b"></gwd-image>
+          <gwd-taparea id="gwd-taparea_1" class="gwd-taparea-1k76"></gwd-taparea>
+        </div>
+      </gwd-page>
+    </gwd-pagedeck>
+  </gwd-google-ad>
+  <script type="text/javascript" id="gwd-init-code">
+    (function() {
+      var gwdAd = document.getElementById('gwd-ad');
+
+      /**
+       * Handles the DOMContentLoaded event. The DOMContentLoaded event is
+       * fired when the document has been completely loaded and parsed.
+       */
+      function handleDomContentLoaded(event) {
+
+      }
+
+      /**
+       * Handles the WebComponentsReady event. This event is fired when all
+       * custom elements have been registered and upgraded.
+       */
+      function handleWebComponentsReady(event) {
+        // Start the Ad lifecycle.
+        requestAnimationFrame(function() {
+          setTimeout(function() {
+            gwdAd.initAd();
+          }, 1);
+        });
+      }
+
+      /**
+       * Handles the event that is dispatched after the Ad has been
+       * initialized and before the default page of the Ad is shown.
+       */
+      function handleAdInitialized(event) {}
+
+      window.addEventListener('DOMContentLoaded',
+        handleDomContentLoaded, false);
+      window.addEventListener('WebComponentsReady',
+        handleWebComponentsReady, false);
+      window.addEventListener('adinitialized',
+        handleAdInitialized, false);
+    })();
+  </script>
+</body>
+
+</html>
